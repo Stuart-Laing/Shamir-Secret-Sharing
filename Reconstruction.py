@@ -110,10 +110,38 @@ print(Fraction(10, 4, reduce=True))
 print(int(Fraction(20, 10, reduce=True)))
 """
 
+parts = [(1, 9285275391624), (2, 27078320587385), (4, 87287720390361)]
+required_parts = len(parts)
+
+answer_parts = []
+
+for index, part in enumerate(parts):
+    answer_parts.append(None)
+    for fraction in range(0, required_parts):
+        if fraction != index:
+            if answer_parts[index] is None:
+                answer_parts[index] = Fraction(0 - parts[fraction][0], parts[index][0] - parts[fraction][0])
+
+            else:
+                answer_parts[index] *= Fraction(0 - parts[fraction][0], parts[index][0] - parts[fraction][0])
+
+
+print(answer_parts)
+print(Fraction(1, 3) * (0 - 2) * (0 - 4))
+
+answer_parts[0] *= 9285275391624
+answer_parts[1] *= 27078320587385
+answer_parts[2] *= 87287720390361
+
+slow_track_answer = answer_parts[0]
+for fraction in answer_parts[1:]:
+    slow_track_answer += fraction
+print(slow_track_answer)
 
 fast_track_answer = Fraction(9285275391624, 3) * (0 - 2) * (0 - 4) + \
                     Fraction(-27078320587385, 2) * (0 - 1) * (0 - 4) + \
                     Fraction(87287720390361, 6) * (0 - 1) * (0 - 2)
 
+print()
 print(fast_track_answer)
 print(int(fast_track_answer + 91994388364979))
