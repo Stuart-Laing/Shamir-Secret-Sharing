@@ -1,5 +1,7 @@
 import random
 
+import TextConversion
+
 
 class Polynomial:
     def __init__(self, *values):
@@ -23,32 +25,14 @@ class Polynomial:
         return y
 
 
-def encode_secret(secret_string):
-    encoded_secret = "1"
-    for character in secret_string:
-        new_val = hex(ord(character))[2:]
-        if len(new_val) < 2:
-            new_val = "0" + new_val
-
-        encoded_secret += new_val
-    return int(encoded_secret, 16)
-
-
 s = "Hide Me"
-secret = encode_secret(s)
-total_parts = 10
-min_parts_required = 4
-
-secret = 91694388364660
 total_parts = 5
-min_parts_required = 3
+min_parts_required = 5
+
+secret = TextConversion.encode(s)
 
 random_field_limit = random.randint(max(secret, total_parts) * 2, max(secret, total_parts) * 4)
 poly_numbers = []
-
-random_field_limit = 91994388364979
-poly_numbers = [5481390490034,
-                4103884901909]
 
 while len(poly_numbers) != (min_parts_required - 1):
     random_number = random.randint(2, random_field_limit - 1)
@@ -71,6 +55,6 @@ print(f"Random field limit : {random_field_limit}")
 print(f"Random numbers for polynomial: {poly_numbers}")
 print()
 print(f"Secret Polynomial : {secret_poly}")
-print(f"Secret Parts : \n")
+print(f"Secret Parts : ")
 for part in parts:
     print(part)
