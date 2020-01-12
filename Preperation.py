@@ -1,6 +1,6 @@
 import random
 
-import TextConversion
+import text_conversion
 
 
 class Polynomial:
@@ -29,7 +29,7 @@ s = "Hide Me"
 total_parts = 5
 min_parts_required = 5
 
-secret = TextConversion.encode(s)
+secret = text_conversion.encode(s)
 
 random_field_limit = random.randint(max(secret, total_parts) * 2, max(secret, total_parts) * 4)
 poly_numbers = []
