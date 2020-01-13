@@ -1,5 +1,5 @@
 import random
-import text_conversion
+import conversions
 
 import reconstruction
 
@@ -53,7 +53,7 @@ def check_prime(num):
 
 
 def create_part_list(secret_string, total_parts_to_create, minimum_parts_for_reconstruction):
-    secret_number = text_conversion.encode(secret_string)
+    secret_number = conversions.encode(secret_string)
 
     field_limit = 0
     for exponent in MERSENNE_PRIMES_EXPONENTS:

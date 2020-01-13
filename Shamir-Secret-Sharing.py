@@ -11,6 +11,11 @@ import verify
 # Allow you to save numbers instead of letters, using the actual number value would be faster
 # Only the part values need to be in various bases, the numbers/x_coordinates must be in base 10
 # Verify base
+# Only guaranteed to work if you use the first k values of the parts list as they are the ones verified
+#     In order to check the other combinations for a n of 20 and a k of 4 it would be thousands of checks
+#     I think im just kinda fucked
+# convert project to a package that can be ran or installed as wished
+# kill self
 
 arg_handler = argcurse.Handler("-h", "--help")
 arg_handler.add_default("""Usage: Secret-Sharing [mode] [options]

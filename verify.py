@@ -79,6 +79,18 @@ class Base:
     pass
 
 
+class Secret:
+    pass
+
+
+class NAndK:
+    pass
+
+
+class FieldLimit:
+    pass
+
+
 class PartsFileFormatError(Exception):
     pass
 

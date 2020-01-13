@@ -1,4 +1,4 @@
-import text_conversion
+import conversions
 
 
 class Fraction:
@@ -126,4 +126,4 @@ def retrieve_secret(parts_list, field_limit):
     # print()
     # print(f"Fraction representation : {slow_track_answer}")
 
-    return text_conversion.decode(int(slow_track_answer) % field_limit)
+    return conversions.decode(int(slow_track_answer) % field_limit)
