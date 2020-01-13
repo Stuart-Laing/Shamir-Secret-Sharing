@@ -1,6 +1,10 @@
 import random
 import text_conversion
 
+import reconstruction
+
+MERSENNE_PRIMES_EXPONENTS = (5, 7, 13, 17, 19, 31, 61, 89, 107, 127, 521, 607, 1279)
+
 
 class Polynomial:
     def __init__(self, *values):
@@ -24,6 +28,17 @@ class Polynomial:
         return y
 
 
+def check_reconstruct(parts_list, field_limit, secret_string):
+    try:
+        possible_secret_number = reconstruction.retrieve_secret(parts_list, field_limit)
+    except ValueError:
+        return False
+
+    if possible_secret_number == secret_string:
+        return True
+    return False
+
+
 def check_prime(num):
     if num == 2:
         return False
@@ -40,53 +55,63 @@ def check_prime(num):
 def create_part_list(secret_string, total_parts_to_create, minimum_parts_for_reconstruction):
     secret_number = text_conversion.encode(secret_string)
 
-    random_field_limit = random.randint(max(secret_number, total_parts_to_create),
-                                        max(secret_number, total_parts_to_create) * 2)
-
     field_limit = 0
-
-    for possible_field_limit in range(random_field_limit, random_field_limit * 5):
-        if check_prime(possible_field_limit):
-            field_limit = possible_field_limit
+    for exponent in MERSENNE_PRIMES_EXPONENTS:
+        if (2 ** exponent) - 1 > max(secret_number, total_parts_to_create):
+            field_limit = (2 ** exponent) - 1
             break
 
     if field_limit == 0:
-        # TODO Error out boi
         pass
+        # TODO Raise an error boi
 
-    field_limit = 28642213
-
-    poly_numbers = set()
-
-    while len(poly_numbers) != (minimum_parts_for_reconstruction - 1):
-        poly_numbers.add(random.randint(2, field_limit - 1))
-
-    print(f"secret='{secret_string}'")
-    print(f"secret_number={secret_number}")
-    print()
-    print(f"field_limit={field_limit}")
-    print(f"poly_numbers={poly_numbers}")
-
-    secret_poly = Polynomial(secret_number, *poly_numbers)
-
-    print(f"Polynomial={secret_poly}")
-    print()
+    reconstruct_successful = False
 
     parts = []
-    for x_coord in range(1, total_parts_to_create + 1):
-        print(f"Part Num : {x_coord}")
-        print(f"    x coord           : {x_coord}")
-        print(f"    y coord           : {secret_poly.find_y(x_coord)}")
-        print(f"    field limit       : {field_limit}")
-        print(f"    y mod field limit : {secret_poly.find_y(x_coord) % field_limit}")
-        print(f"    {secret_poly.find_y(x_coord)} % {field_limit} : {secret_poly.find_y(x_coord) % field_limit}")
-        parts.append((x_coord, secret_poly.find_y(x_coord) % field_limit))
+    poly_numbers = set()
+
+    while not reconstruct_successful:
+        poly_numbers = set()
+
+        while len(poly_numbers) != (minimum_parts_for_reconstruction - 1):
+            poly_numbers.add(random.randint(2, field_limit - 1))
+
+        #
+        # print(f"secret='{secret_string}'")
+        # print(f"secret_number={secret_number}")
+        # print()
+        # print(f"field_limit={field_limit}")
+        # print(f"poly_numbers={poly_numbers}")
+
+        secret_poly = Polynomial(secret_number, *poly_numbers)
+
+        # print(f"Polynomial={secret_poly}")
+        # print()
+
+        parts = []
+        for x_coord in range(1, total_parts_to_create + 1):
+            # print(f"Part Num : {x_coord}")
+            # print(f"    x coord           : {x_coord}")
+            # print(f"    y coord           : {secret_poly.find_y(x_coord)}")
+            # print(f"    field limit       : {field_limit}")
+            # print(f"    y mod field limit : {secret_poly.find_y(x_coord) % field_limit}")
+            # print(f"    {secret_poly.find_y(x_coord)} % {field_limit} : {secret_poly.find_y(x_coord) % field_limit}")
+            parts.append((x_coord, secret_poly.find_y(x_coord) % field_limit))
+
+        if check_reconstruct(parts[:minimum_parts_for_reconstruction], field_limit, secret_string):
+            reconstruct_successful = True
 
     return parts, field_limit
 
 
+"""
 parts_list, fieldf_limit = create_part_list("WoW", 5, 3)
-
+m : {x_coord}")
+        print(f"    x coord           : {x_coord}")
+        print(f"    y coord           : {secret_poly.find_y(x_coord)}")
+        print(f"    field limit       : {field_limit}")
+        print(f"    y mod field limit : {secret_poly.find_y(x_coord) % field_limit}")
+        print(f"    {secret_poly.
 import reconstruction
 try:
     secret_num = reconstruction.retrieve_secret([parts_list[0]] + [parts_list[1]] + [parts_list[3]], fieldf_limit)
@@ -97,6 +122,7 @@ try:
 except ValueError:
     print()
     print("Failed")
+"""
 
 """
 field_limit = 12530321
