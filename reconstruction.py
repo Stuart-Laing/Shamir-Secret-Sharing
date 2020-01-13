@@ -123,8 +123,9 @@ def retrieve_secret(parts_list, field_limit):
     for fraction in answer_parts[1:]:
         slow_track_answer += fraction
 
-    slow_track_answer = int(slow_track_answer)
-    while slow_track_answer < 0:
-        slow_track_answer += field_limit
+    print()
+    print(f"Fraction representation : {slow_track_answer}")
+
+    return int(slow_track_answer) % field_limit
 
     return text_conversion.decode(slow_track_answer)

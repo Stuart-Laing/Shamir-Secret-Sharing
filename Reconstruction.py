@@ -110,7 +110,24 @@ print(Fraction(10, 4, reduce=True))
 print(int(Fraction(20, 10, reduce=True)))
 """
 
+"""
+py Shamir-Secret-Sharing.py create -s "WoW" -n 5 -k 3
+Field Limit : 81718267
+
+Part Number | Value
+1 | 57910412
+2 | 42050535
+3 | 56645987
+4 | 19978501
+5 | 13766344
+"""
+
 parts = [(1, 9285275391624), (2, 27078320587385), (4, 87287720390361)]
+parts = [(1, 57910412), (2, 42050535), (4, 19978501)]
+parts = [(1, 22605373), (2, 8319207), (4, 1118663)]
+parts = [(1, 13127206), (2, 15869079), (4, 16330387)]
+parts = [(1, 15876835), (2, 1974536), (4, 23201205)]
+
 required_parts = len(parts)
 
 answer_parts = []
@@ -127,17 +144,19 @@ for index, part in enumerate(parts):
 
 
 print(answer_parts)
-print(Fraction(1, 3) * (0 - 2) * (0 - 4))
 
-answer_parts[0] *= 9285275391624
-answer_parts[1] *= 27078320587385
-answer_parts[2] *= 87287720390361
+answer_parts[0] *= 15876835
+answer_parts[1] *= 1974536
+answer_parts[2] *= 23201205
+
+print(answer_parts)
 
 slow_track_answer = answer_parts[0]
 for fraction in answer_parts[1:]:
     slow_track_answer += fraction
-print(slow_track_answer)
 
+print(slow_track_answer)
+exit()
 fast_track_answer = Fraction(9285275391624, 3) * (0 - 2) * (0 - 4) + \
                     Fraction(-27078320587385, 2) * (0 - 1) * (0 - 4) + \
                     Fraction(87287720390361, 6) * (0 - 1) * (0 - 2)

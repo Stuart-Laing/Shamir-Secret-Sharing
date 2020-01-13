@@ -25,9 +25,9 @@ class Polynomial:
         return y
 
 
-s = "Hide Me"
+s = "WoW"
 total_parts = 5
-min_parts_required = 5
+min_parts_required = 3
 
 secret = text_conversion.encode(s)
 

@@ -7,7 +7,6 @@ import verify
 # TODO
 # Allow output and inputs in the form of base 64 or 16
 
-
 arg_handler = argcurse.Handler("-h", "--help")
 arg_handler.add_default("""Usage: Secret-Sharing [mode] [options]
 Try -h or --help for more info.""")
@@ -30,7 +29,6 @@ arg_handler.add_flag("-p", "--parts-file", description="The file holding the req
 arg_handler.generate_help_message("Secret-Sharing [mode] [options]")
 arg_handler.compile()
 
-
 if arg_handler.results.mode_used == "create":
     parts_list, field_limit = creation.create_part_list(arg_handler.results.result_dict["-s"].flag_content,
                                                         int(arg_handler.results.result_dict["-n"].flag_content),
@@ -43,7 +41,7 @@ if arg_handler.results.mode_used == "create":
         print(f"{part[0]} | {part[1]}")
 
 elif arg_handler.results.mode_used == "reconstruct":
-    parts_list = reconstruction.read_parts_from_file("demo-p-324618952437469213502715773325636234576570.txt")
+    parts_list = reconstruction.read_parts_from_file(arg_handler.results.result_dict["-p"].flag_content)
     field_limit = int(arg_handler.results.result_dict["-f"].flag_content)
 
     secret = reconstruction.retrieve_secret(parts_list, field_limit)
