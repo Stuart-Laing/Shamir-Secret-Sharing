@@ -62,7 +62,7 @@ class PartsFile:
         else:
             allowed_chars = "kill"
 
-        valid_base = re.compile(r"^\d\040[A-Za-z0-9+/]+$")
+        valid_base = re.compile(r"^\d+\040[A-Za-z0-9+/]+$")
 
         for line_no, line in enumerate(lines):
             line_match_obj = valid_base.search(line)

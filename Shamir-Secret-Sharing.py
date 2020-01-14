@@ -15,6 +15,7 @@ import verify
 #     In order to check the other combinations for a n of 20 and a k of 4 it would be thousands of checks
 #     I think im just kinda fucked
 # convert project to a package that can be ran or installed as wished
+# make better errors
 # kill self
 
 arg_handler = argcurse.Handler("-h", "--help")

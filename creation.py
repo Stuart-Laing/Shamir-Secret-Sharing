@@ -21,35 +21,38 @@ class Polynomial:
     def find_x(self, y):
         pass
 
-    def find_y(self, x):
+    def find_y(self, x, field_limit):
         y = 0
         for index, value in enumerate(self.values):
-            y += value * (x ** index)
+            exponentiation = (x ** index) % field_limit  # X^2, X^3 ect
+            term = (value * exponentiation) % field_limit  # 29876128573619287 * (X^3)
+            y = (y + term) % field_limit
+
+            # y += (value * (x ** index)) % field_limit
         return y
 
+        # exponentiation = (x ** i) % prime
+        # term = (coefficients[i] * exponentiation) % prime
+        # y = (y + term) % prime
 
-def check_reconstruct(parts_list, field_limit, secret_string):
-    try:
-        possible_secret_number = reconstruction.retrieve_secret(parts_list, field_limit)
-    except ValueError:
-        return False
-
-    if possible_secret_number == secret_string:
-        return True
-    return False
+def check_reconstruct(parts_list, minimum_parts_for_reconstruction, field_limit, secret_string):
+    return True
 
 
-def check_prime(num):
-    if num == 2:
-        return False
-    if num % 2 == 0:
-        return False
+    for i in range(0, len(parts_list), minimum_parts_for_reconstruction):
+        current_check_block = parts_list[i:i + minimum_parts_for_reconstruction]
 
-    for poss_factor in range(3, int(num**(1/2)) + 3, 2):
-        if num % poss_factor == 0:
+        current_check_block += [parts_list[filler_index] for filler_index in
+                                range(0, minimum_parts_for_reconstruction - len(current_check_block))]
+
+        try:
+            possible_secret_number = reconstruction.retrieve_secret(current_check_block, field_limit)
+        except ValueError:
             return False
 
-    return True
+        if possible_secret_number == secret_string:
+            return True
+        return False
 
 
 def create_part_list(secret_string, total_parts_to_create, minimum_parts_for_reconstruction):
@@ -68,15 +71,14 @@ def create_part_list(secret_string, total_parts_to_create, minimum_parts_for_rec
     reconstruct_successful = False
 
     parts = []
-    poly_numbers = set()
 
     while not reconstruct_successful:
+        # ########## THIS PART IS SCUFFED ##########
         poly_numbers = set()
-
         while len(poly_numbers) != (minimum_parts_for_reconstruction - 1):
             poly_numbers.add(random.randint(2, field_limit - 1))
+        # ########## THIS PART IS SCUFFED ##########
 
-        #
         # print(f"secret='{secret_string}'")
         # print(f"secret_number={secret_number}")
         # print()
@@ -96,9 +98,9 @@ def create_part_list(secret_string, total_parts_to_create, minimum_parts_for_rec
             # print(f"    field limit       : {field_limit}")
             # print(f"    y mod field limit : {secret_poly.find_y(x_coord) % field_limit}")
             # print(f"    {secret_poly.find_y(x_coord)} % {field_limit} : {secret_poly.find_y(x_coord) % field_limit}")
-            parts.append((x_coord, secret_poly.find_y(x_coord) % field_limit))
+            parts.append((x_coord, secret_poly.find_y(x_coord, field_limit)))
 
-        if check_reconstruct(parts[:minimum_parts_for_reconstruction], field_limit, secret_string):
+        if check_reconstruct(parts, minimum_parts_for_reconstruction, field_limit, secret_string):
             reconstruct_successful = True
 
     return parts, field_limit
