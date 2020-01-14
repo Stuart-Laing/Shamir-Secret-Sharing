@@ -1,0 +1,52 @@
+import random
+
+MERSENNE_PRIMES_EXPONENTS = (5, 7, 13, 17, 19, 31, 61, 89, 107, 127, 521, 607, 1279)
+
+
+class _Polynomial:
+    def __init__(self, *values):
+        # TODO Find a better name than 'values'
+        self.values = values
+
+    def __repr__(self):
+        # output_string = f"{self.values[0]} + "
+
+        output_string = " + ".join([f"{num}x^{index}" for index, num in enumerate(self.values)])
+
+        return output_string
+
+    def find_x(self, y):
+        pass
+
+    def find_y(self, x, field_limit):
+        y = 0
+        for index, value in enumerate(self.values):
+            exponentiation = (x ** index) % field_limit
+            term = (value * exponentiation) % field_limit
+            y = (y + term) % field_limit
+        return y
+
+
+def create_part_list(secret_number, total_parts_to_create, minimum_parts_for_reconstruction):
+
+    field_limit = 0
+    for exponent in MERSENNE_PRIMES_EXPONENTS:
+        if (2 ** exponent) - 1 > max(secret_number, total_parts_to_create):
+            field_limit = (2 ** exponent) - 1
+            break
+
+    if field_limit == 0:
+        pass
+        # TODO Raise an error boi
+
+    poly_numbers = set()
+    while len(poly_numbers) != (minimum_parts_for_reconstruction - 1):
+        poly_numbers.add(random.randint(2, field_limit - 1))
+
+    secret_poly = _Polynomial(secret_number, *poly_numbers)
+
+    parts = []
+    for x_coord in range(1, total_parts_to_create + 1):
+        parts.append((x_coord, secret_poly.find_y(x_coord, field_limit)))
+
+    return parts, field_limit

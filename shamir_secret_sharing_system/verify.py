@@ -1,5 +1,6 @@
 import re
 import os
+import shamir_secret_sharing_system
 
 
 class PartsFile:
@@ -40,7 +41,8 @@ class PartsFile:
             lines = [line.strip() for line in parts_file.readlines()]
 
         if len(lines) < 2:
-            raise PartsFileCountError("Chosen file does not contain enough entries")
+            raise shamir_secret_sharing_system.errors.PartsFileCountError(
+                "Chosen file does not contain enough entries")
 
         if self.base == 2:
             allowed_chars = ("0", "1")
@@ -68,11 +70,13 @@ class PartsFile:
             line_match_obj = valid_base.search(line)
 
             if line_match_obj is None:
-                raise PartsFileFormatError("Parts File must be in the format '<PartNum> <PartValue>' 1 per line")
+                raise shamir_secret_sharing_system.errors.PartsFileFormatError(
+                    "Parts File must be in the format '<PartNum> <PartValue>' 1 per line")
 
             for value_char in line_match_obj.group().split(" ")[1]:
                 if value_char not in allowed_chars:
-                    raise PartsFileBaseError(f"Part value at line no {line_no + 1} is not of the expected base")
+                    raise shamir_secret_sharing_system.errors.PartsFileBaseError(
+                        f"Part value at line no {line_no + 1} is not of the expected base")
 
 
 class Base:
@@ -88,16 +92,4 @@ class NAndK:
 
 
 class FieldLimit:
-    pass
-
-
-class PartsFileFormatError(Exception):
-    pass
-
-
-class PartsFileCountError(Exception):
-    pass
-
-
-class PartsFileBaseError(Exception):
     pass

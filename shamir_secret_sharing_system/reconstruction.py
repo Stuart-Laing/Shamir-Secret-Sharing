@@ -1,7 +1,6 @@
-import conversions
 
 
-class Fraction:
+class _Fraction:
     def __init__(self, numerator, denominator, reduce=False):
         if not (isinstance(numerator, int) and isinstance(denominator, int)):
             raise TypeError("Fraction numerator and denominator must be integers")
@@ -28,46 +27,46 @@ class Fraction:
 
     def __mul__(self, other):
         if isinstance(other, int):
-            return Fraction(self.numerator * other, self.denominator, reduce=True)
+            return _Fraction(self.numerator * other, self.denominator, reduce=True)
 
-        elif isinstance(other, Fraction):
-            return Fraction(self.numerator * other.numerator, self.denominator * other.denominator, reduce=True)
+        elif isinstance(other, _Fraction):
+            return _Fraction(self.numerator * other.numerator, self.denominator * other.denominator, reduce=True)
 
         else:
             raise TypeError(f"Fraction Cannot be multiplied by {type(other)}")
 
     def __add__(self, other):
         if isinstance(other, int):
-            return Fraction(self.numerator + (other * self.denominator), self.denominator, reduce=True)
+            return _Fraction(self.numerator + (other * self.denominator), self.denominator, reduce=True)
 
-        elif isinstance(other, Fraction):
+        elif isinstance(other, _Fraction):
             if self.denominator == other.denominator:
-                return Fraction(self.numerator + other.numerator, self.denominator, reduce=True)
+                return _Fraction(self.numerator + other.numerator, self.denominator, reduce=True)
 
             new_denominator = self.denominator * other.denominator
 
             new_numerator1 = self.numerator * other.denominator
             new_numerator2 = other.numerator * self.denominator
 
-            return Fraction(new_numerator1 + new_numerator2, new_denominator, reduce=True)
+            return _Fraction(new_numerator1 + new_numerator2, new_denominator, reduce=True)
 
         else:
             raise TypeError(f"Fraction Cannot be added to by {type(other)}")
 
     def __sub__(self, other):
         if isinstance(other, int):
-            return Fraction(self.numerator - (other * self.denominator), self.denominator, reduce=True)
+            return _Fraction(self.numerator - (other * self.denominator), self.denominator, reduce=True)
 
-        elif isinstance(other, Fraction):
+        elif isinstance(other, _Fraction):
             if self.denominator == other.denominator:
-                return Fraction(self.numerator - other.numerator, self.denominator, reduce=True)
+                return _Fraction(self.numerator - other.numerator, self.denominator, reduce=True)
 
             new_denominator = self.denominator * other.denominator
 
             new_numerator1 = self.numerator * other.denominator
             new_numerator2 = other.numerator * self.denominator
 
-            return Fraction(new_numerator1 - new_numerator2, new_denominator, reduce=True)
+            return _Fraction(new_numerator1 - new_numerator2, new_denominator, reduce=True)
 
         else:
             raise TypeError(f"Fraction Cannot be subtracted by {type(other)}")
@@ -99,7 +98,28 @@ def read_parts_from_file(file_path):
     return parts_list
 
 
-def extended_gcd(a, b):
+def retrieve_secret_number(parts_list, field_limit):
+    secret_number = 0
+
+    min_parts_needed = len(parts_list)
+
+    for part_index, part in enumerate(parts_list):
+        lagrange_fraction = _Fraction(1, 1)
+
+        for i in range(1, min_parts_needed + 1):
+            if (i - 1) == part_index:
+                continue
+
+            lagrange_fraction *= _Fraction(0 - parts_list[i - 1][0], parts_list[part_index][0] - parts_list[i - 1][0])
+
+        lagrange_number = lagrange_fraction.numerator * _mod_inverse(lagrange_fraction.denominator, field_limit)
+
+        secret_number = (secret_number + part[1] * lagrange_number) % field_limit
+
+    return secret_number
+
+
+def _extended_gcd(a, b):
     """
     Shamelessly stolen from https://brilliant.org/wiki/extended-euclidean-algorithm/
     """
@@ -125,28 +145,7 @@ def extended_gcd(a, b):
     return x, y, gcd
 
 
-def mod_inverse(k, prime):
-    y = extended_gcd(prime, k)[1]
+def _mod_inverse(k, prime):
+    y = _extended_gcd(prime, k)[1]
 
     return y % prime
-
-
-def retrieve_secret(parts_list, field_limit):
-    secret_number = 0
-
-    min_parts_needed = len(parts_list)
-
-    for part_index, part in enumerate(parts_list):
-        lagrange_fraction = Fraction(1, 1)
-
-        for i in range(1, min_parts_needed + 1):
-            if (i - 1) == part_index:
-                continue
-
-            lagrange_fraction *= Fraction(0 - parts_list[i - 1][0], parts_list[part_index][0] - parts_list[i - 1][0])
-
-        lagrange_number = lagrange_fraction.numerator * mod_inverse(lagrange_fraction.denominator, field_limit)
-
-        secret_number = (secret_number + part[1] * lagrange_number) % field_limit
-
-    return conversions.decode(secret_number)

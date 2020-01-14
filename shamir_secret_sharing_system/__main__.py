@@ -1,8 +1,5 @@
 import argcurse
-import creation
-import reconstruction
-import verify
-
+import shamir_secret_sharing_system as ssss
 
 # TODO
 # Allow output and inputs in the form of base 64 or 16
@@ -17,6 +14,7 @@ import verify
 # convert project to a package that can be ran or installed as wished
 # make better errors
 # Possible option to not bother with field limits
+# Learn how sub packages work
 # kill self
 
 arg_handler = argcurse.Handler("-h", "--help")
@@ -46,9 +44,9 @@ arg_handler.generate_help_message("Secret-Sharing [mode] [options]")
 arg_handler.compile()
 
 if arg_handler.results.mode_used == "create":
-    parts_list, field_limit = creation.create_part_list(arg_handler.results.result_dict["-s"].flag_content,
-                                                        int(arg_handler.results.result_dict["-n"].flag_content),
-                                                        int(arg_handler.results.result_dict["-k"].flag_content))
+    parts_list, field_limit = ssss.creation.create_part_list(arg_handler.results.result_dict["-s"].flag_content,
+                                                             int(arg_handler.results.result_dict["-n"].flag_content),
+                                                             int(arg_handler.results.result_dict["-k"].flag_content))
 
     print(f"Field Limit : {field_limit}")
     print()
@@ -60,7 +58,7 @@ elif arg_handler.results.mode_used == "reconstruct":
     parts_file_path = arg_handler.results.result_dict["-p"].flag_content
 
     try:
-        verify.PartsFile(parts_file_path, 10)
+        ssss.verify.PartsFile(parts_file_path, 10)
     except FileExistsError:
         print("ERROR")
         print("Chosen parts file does not exist")
@@ -69,22 +67,22 @@ elif arg_handler.results.mode_used == "reconstruct":
         print("ERROR")
         print("Chosen part file cannot be opened")
         exit()
-    except verify.PartsFileCountError:
+    except ssss.errors.PartsFileCountError:
         print("ERROR")
         print("Chosen file does not contain enough entries")
         exit()
-    except verify.PartsFileFormatError:
+    except ssss.errors.PartsFileFormatError:
         print("ERROR")
         print("Parts File must be in the format '<PartNum> <PartValue>' 1 per line")
         exit()
-    except verify.PartsFileBaseError:
+    except ssss.errors.PartsFileBaseError:
         print("ERROR")
         print("Part values must be in the specified base")
         exit()
 
-    parts_list = reconstruction.read_parts_from_file(parts_file_path)
+    parts_list = ssss.reconstruction.read_parts_from_file(parts_file_path)
 
     field_limit = int(arg_handler.results.result_dict["-f"].flag_content)
 
-    secret = reconstruction.retrieve_secret(parts_list, field_limit)
+    secret = ssss.reconstruction.retrieve_secret_number(parts_list, field_limit)
     print(f"Secret : '{secret}'")

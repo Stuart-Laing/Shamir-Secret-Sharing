@@ -1,6 +1,6 @@
 
 
-def encode(secret_string):
+def string_to_integer(secret_string):
     """
     Converts the string to a sequence of hex values that is interpreted as an integer
 
@@ -25,7 +25,7 @@ def encode(secret_string):
     return int(encoded_secret, 16)
 
 
-def decode(secret_number):
+def integer_to_string(secret_number):
     """
     Converts the secret number to its string representation
 
