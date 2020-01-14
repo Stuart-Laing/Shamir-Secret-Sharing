@@ -16,6 +16,7 @@ import verify
 #     I think im just kinda fucked
 # convert project to a package that can be ran or installed as wished
 # make better errors
+# Possible option to not bother with field limits
 # kill self
 
 arg_handler = argcurse.Handler("-h", "--help")

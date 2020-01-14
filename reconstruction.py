@@ -99,75 +99,54 @@ def read_parts_from_file(file_path):
     return parts_list
 
 
-def egcd(a, b):
-    if a == 0:
-        return (b, 0, 1)
-    else:
-        g, y, x = egcd(b % a, a)
-        return (g, x - (b // a) * y, y)
+def extended_gcd(a, b):
+    """
+    Shamelessly stolen from https://brilliant.org/wiki/extended-euclidean-algorithm/
+    """
+    x = 0
+    y = 1
+    u = 1
+    v = 0
+
+    while a != 0:
+        q = b // a
+        r = b % a
+
+        m = x - u * q
+        n = y - v * q
+
+        b = a
+        a = r
+        x = u
+        y = v
+        u = m
+        v = n
+    gcd = b
+    return x, y, gcd
 
 
 def mod_inverse(k, prime):
-    k = k % prime
-    if k < 0:
-        r = egcd(prime, -k)[2]
-    else:
-        r = egcd(prime, k)[2]
-    return (prime + r) % prime
+    y = extended_gcd(prime, k)[1]
 
-
-def modular_lagrange_interpolation(x, points, prime):
-    # break the points up into lists of x and y values
-    x_values, y_values = zip(*points)
-    # initialize f(x) and begin the calculation: f(x) = SUM( y_i * l_i(x) )
-    f_x = 0
-    for i in range(len(points)):
-        # evaluate the lagrange basis polynomial l_i(x)
-        numerator, denominator = 1, 1
-        for j in range(len(points)):
-            # don't compute a polynomial fraction if i equals j
-            if i == j:
-                continue
-            # compute a fraction & update the existing numerator + denominator
-            numerator = (numerator * (x - x_values[j])) % prime
-            denominator = (denominator * (x_values[i] - x_values[j])) % prime
-        # get the polynomial from the numerator + denominator mod inverse
-        lagrange_polynomial = numerator * mod_inverse(denominator, prime)
-        # multiply the current y & the evaluated polynomial & add it to f(x)
-        f_x = (prime + f_x + (y_values[i] * lagrange_polynomial)) % prime
-    return f_x
+    return y % prime
 
 
 def retrieve_secret(parts_list, field_limit):
+    secret_number = 0
 
-    return conversions.decode(modular_lagrange_interpolation(0, parts_list, field_limit))
+    min_parts_needed = len(parts_list)
 
-    required_parts = len(parts_list)
+    for part_index, part in enumerate(parts_list):
+        lagrange_fraction = Fraction(1, 1)
 
-    answer_parts = []
+        for i in range(1, min_parts_needed + 1):
+            if (i - 1) == part_index:
+                continue
 
-    # ################### BROKEN PART ###################
-    for index, part in enumerate(parts_list):
-        answer_parts.append(None)
-        for fraction in range(0, required_parts):
-            if fraction != index:
-                if answer_parts[index] is None:
-                    answer_parts[index] = \
-                        Fraction(0 - parts_list[fraction][0], parts_list[index][0] - parts_list[fraction][0])
+            lagrange_fraction *= Fraction(0 - parts_list[i - 1][0], parts_list[part_index][0] - parts_list[i - 1][0])
 
-                else:
-                    answer_parts[index] *= \
-                        Fraction(0 - parts_list[fraction][0], parts_list[index][0] - parts_list[fraction][0])
+        lagrange_number = lagrange_fraction.numerator * mod_inverse(lagrange_fraction.denominator, field_limit)
 
-    for part_index in range(0, len(parts_list)):
-        answer_parts[part_index] *= parts_list[part_index][1]
-    # ################### BROKEN PART ###################
+        secret_number = (secret_number + part[1] * lagrange_number) % field_limit
 
-    slow_track_answer = answer_parts[0]
-    for fraction in answer_parts[1:]:
-        slow_track_answer += fraction
-
-    # print()
-    # print(f"Fraction representation : {slow_track_answer}")
-
-    return conversions.decode(int(slow_track_answer) % field_limit)
+    return conversions.decode(secret_number)
