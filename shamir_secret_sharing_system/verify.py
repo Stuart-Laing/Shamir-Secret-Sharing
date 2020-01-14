@@ -6,19 +6,27 @@ import shamir_secret_sharing_system
 class PartsFile:
     def __init__(self, file_path, base):
         # Things to check
+        # file path is actually a string
         # Permissions to read the file
         # File exists
         # File is in the correct format
         # File has at least 2 entries
         # File is actually a text file
 
+        # base can be assumed to be correct at this stage
+
         self.file_path = file_path
         self.base = base
 
+        self.check_file_path_type()
         self.check_exists()
         self.check_if_file()
         self.check_permissions()
         self.check_format()
+
+    def check_file_path_type(self):
+        if not isinstance(self.file_path, str):
+            raise TypeError("file_path must be of type str")
 
     def check_exists(self):
         if not os.path.exists(self.file_path):
@@ -80,16 +88,20 @@ class PartsFile:
 
 
 class Base:
-    pass
+    def __init__(self, base):
+        pass
 
 
 class Secret:
-    pass
+    def __init__(self, secret_string):
+        pass
 
 
 class NAndK:
-    pass
+    def __init__(self, total_parts, min_for_reconstruct):
+        pass
 
 
 class FieldLimit:
-    pass
+    def __init__(self, field_limit, base):
+        pass

@@ -1,3 +1,4 @@
+import shamir_secret_sharing_system
 
 
 class _Fraction:
@@ -91,7 +92,17 @@ class _Fraction:
                     break
 
 
-def read_parts_from_file(file_path):
+def read_parts_from_file(file_path, base):
+    """
+    Read the parts from a text file
+
+    :param file_path: str The path to the parts file
+    :param base: int The number base the parts file is in
+    :returns parts_list: list A list of tuples containing the x and y values for the parts
+    """
+    shamir_secret_sharing_system.verify.Base(base)
+    shamir_secret_sharing_system.verify.PartsFile(file_path, base)
+
     with open(file_path, "r") as parts_file:
         parts_list = [(int(x.strip().split(" ")[0]), int(x.strip().split(" ")[1])) for x in parts_file.readlines()]
 
@@ -99,6 +110,18 @@ def read_parts_from_file(file_path):
 
 
 def retrieve_secret_number(parts_list, field_limit):
+    """
+    Reconstruct the secret number from a parts list and field limit
+
+    :param parts_list: list A list of tuples containing the x and y values for the parts
+    :param field_limit: int The field limit used when computing the parts - needed for reconstruction
+    :returns secret_number: int The secret number reconstructed from the parts list
+    """
+    if not isinstance(parts_list, list):
+        raise TypeError("parts_list must be of type list")
+    if not isinstance(field_limit, int):
+        raise TypeError("field_limit must be of type int")
+
     secret_number = 0
 
     min_parts_needed = len(parts_list)

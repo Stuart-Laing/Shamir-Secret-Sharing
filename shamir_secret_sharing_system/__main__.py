@@ -3,18 +3,14 @@ import shamir_secret_sharing_system as ssss
 
 # TODO
 # Allow output and inputs in the form of base 64 or 16
-# Figure out why it breaks 10% of the time
 # Make sure n is larger or the same as k
 # Allow you to save numbers instead of letters, using the actual number value would be faster
 # Only the part values need to be in various bases, the numbers/x_coordinates must be in base 10
 # Verify base
-# Only guaranteed to work if you use the first k values of the parts list as they are the ones verified
-#     In order to check the other combinations for a n of 20 and a k of 4 it would be thousands of checks
-#     I think im just kinda fucked
-# convert project to a package that can be ran or installed as wished
 # make better errors
 # Possible option to not bother with field limits
 # Learn how sub packages work
+# Print more messages about the created secret or parts list, give more detail to the user
 # kill self
 
 arg_handler = argcurse.Handler("-h", "--help")
@@ -44,9 +40,23 @@ arg_handler.generate_help_message("Secret-Sharing [mode] [options]")
 arg_handler.compile()
 
 if arg_handler.results.mode_used == "create":
-    parts_list, field_limit = ssss.creation.create_part_list(arg_handler.results.result_dict["-s"].flag_content,
-                                                             int(arg_handler.results.result_dict["-n"].flag_content),
-                                                             int(arg_handler.results.result_dict["-k"].flag_content))
+    secret_string = arg_handler.results.result_dict["-s"].flag_content
+    ssss.verify.Secret(secret_string)
+
+    total_parts_to_create = arg_handler.results.result_dict["-n"].flag_content
+    min_parts_to_reconstruct = arg_handler.results.result_dict["-k"].flag_content
+    ssss.verify.NAndK(total_parts_to_create, min_parts_to_reconstruct)
+
+    if arg_handler.results.result_dict["-ob"].flag_used:
+        base = arg_handler.results.result_dict["-ob"].flag_content
+        ssss.verify.Base(base)
+    else:
+        base = 10
+
+    secret_number = ssss.conversions.string_to_integer(secret_string)
+
+    parts_list, field_limit = ssss.creation.create_part_list(secret_number, int(total_parts_to_create),
+                                                             int(min_parts_to_reconstruct))
 
     print(f"Field Limit : {field_limit}")
     print()
@@ -80,9 +90,16 @@ elif arg_handler.results.mode_used == "reconstruct":
         print("Part values must be in the specified base")
         exit()
 
-    parts_list = ssss.reconstruction.read_parts_from_file(parts_file_path)
+    if arg_handler.results.result_dict["-ib"].flag_used:
+        base = arg_handler.results.result_dict["-ib"].flag_content
+        ssss.verify.Base(base)
+    else:
+        base = 10
 
-    field_limit = int(arg_handler.results.result_dict["-f"].flag_content)
+    field_limit = arg_handler.results.result_dict["-f"].flag_content
+    ssss.verify.FieldLimit(field_limit, base)
+
+    parts_list = ssss.reconstruction.read_parts_from_file(parts_file_path, base)
 
     secret = ssss.reconstruction.retrieve_secret_number(parts_list, field_limit)
     print(f"Secret : '{secret}'")

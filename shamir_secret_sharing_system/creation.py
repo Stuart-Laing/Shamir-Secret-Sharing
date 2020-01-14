@@ -28,6 +28,27 @@ class _Polynomial:
 
 
 def create_part_list(secret_number, total_parts_to_create, minimum_parts_for_reconstruction):
+    """
+    Creates a list of parts from the secret
+
+    :param secret_number: int The secret in the form of a number to be split up
+    :param total_parts_to_create: int The total number of parts that will be created
+    :param minimum_parts_for_reconstruction: int The minimum amount of parts needed to get the secret back
+    :returns parts: list A list of tuples containing the x and y values for the parts
+    :returns field_limit: int The field limit used when computing the parts - needed for reconstruction
+    """
+
+    if not isinstance(secret_number, int):
+        raise TypeError("secret_number must be of type int")
+    if not isinstance(total_parts_to_create, int):
+        raise TypeError("total_parts_to_create must be of type int")
+    if not isinstance(minimum_parts_for_reconstruction, int):
+        raise TypeError("minimum_parts_for_reconstruction must be of type int")
+
+    if total_parts_to_create < minimum_parts_for_reconstruction:
+        raise ValueError("minimum_parts_for_reconstruction must be less than or equal to total_parts_to_create")
+    if minimum_parts_for_reconstruction < 2:
+        raise ValueError("Creating a part list of length one would just be the secret")
 
     field_limit = 0
     for exponent in MERSENNE_PRIMES_EXPONENTS:

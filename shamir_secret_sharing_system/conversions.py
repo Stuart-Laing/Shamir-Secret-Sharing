@@ -8,6 +8,10 @@ def string_to_integer(secret_string):
     :returns secret_number: int The secret string encoded
     :raises ValueError: If the character cannot be represented by two hex digits
     """
+
+    if not isinstance(secret_string, str):
+        raise TypeError("secret_string must be of type str")
+
     # Each single value character is given a leading 0 so they are all the same length
     # We start the string with '1' every time so if the first value has a leading 0 we do not lose any information
     encoded_secret = "1"
@@ -32,6 +36,9 @@ def integer_to_string(secret_number):
     :param secret_number: int The secret string encoded
     :return: secret_string: str The secret string decoded from the number
     """
+    if not isinstance(secret_number, int):
+        raise TypeError("secret_number must be of type int")
+
     secret_string = ""
     # hex(18) gives 0x12 so [2:] discards the leading hex flag
     hex_number = hex(secret_number)[2:]
