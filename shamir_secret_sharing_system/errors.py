@@ -26,3 +26,7 @@ class BaseNotSupportedError(Exception):
 
 class ValueNotOfSpecifiedBaseError(Exception):
     pass
+
+
+class UnrecoverableSecretError(Exception):
+    pass

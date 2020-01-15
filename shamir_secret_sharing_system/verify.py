@@ -3,6 +3,11 @@ import os
 import shamir_secret_sharing_system
 
 
+SUPPORTED_BASES = (10, 16)
+SECRET_STRING_MIN_LEN = 1
+SECRET_STRING_MAX_LEN = 200
+
+
 class Number:
     def __init__(self, number, base):
 
@@ -114,7 +119,7 @@ class Base:
         # The base is one of the supported bases
 
         self.base = base
-        self.allowed_bases = (10, 16)
+        self.allowed_bases = SUPPORTED_BASES
 
         self.check_is_num(command_line_arg)
         self.check_if_allowed()
@@ -148,8 +153,8 @@ class Secret:
         # Each character can be represented by two hex digits
 
         self.secret_string = secret_string
-        self.min_length = 1
-        self.max_length = 200
+        self.min_length = SECRET_STRING_MIN_LEN
+        self.max_length = SECRET_STRING_MAX_LEN
 
         self.check_type()
         self.check_length()
@@ -210,7 +215,8 @@ class NAndK:
 
     def check_n_relation_to_k(self):
         if self.total_parts < self.min_for_reconstruct:
-            raise ValueError("Secret would be unrecoverable if less parts are created than needed to retrieve secret")
+            raise shamir_secret_sharing_system.errors.UnrecoverableSecretError(
+                "Secret would be unrecoverable if less parts are created than needed to retrieve secret")
 
     def check_valid_polynomial(self):
         if self.min_for_reconstruct < 2:
