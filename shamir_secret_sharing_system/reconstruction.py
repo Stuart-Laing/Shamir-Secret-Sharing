@@ -104,7 +104,9 @@ def read_parts_from_file(file_path, base):
     shamir_secret_sharing_system.verify.PartsFile(file_path, base)
 
     with open(file_path, "r") as parts_file:
-        parts_list = [(int(x.strip().split(" ")[0]), int(x.strip().split(" ")[1])) for x in parts_file.readlines()]
+        parts_list = [(int(x.strip().split(" ")[0]),
+                       shamir_secret_sharing_system.conversions.base_converter(x.strip().split(" ")[1], base, 10))
+                      for x in parts_file.readlines()]
 
     return parts_list
 

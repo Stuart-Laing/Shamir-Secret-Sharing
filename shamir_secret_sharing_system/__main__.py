@@ -146,7 +146,6 @@ elif arg_handler.results.mode_used == "reconstruct":
 
     if arg_handler.results.result_dict["-ib"].flag_used:
         base = arg_handler.results.result_dict["-ib"].flag_content
-        ssss.verify.Base(base)
         try:
             ssss.verify.Base(base, command_line_arg=True)
         except TypeError:
@@ -203,9 +202,10 @@ elif arg_handler.results.mode_used == "reconstruct":
 
     parts_list = ssss.reconstruction.read_parts_from_file(parts_file_path, base)
 
-    secret = ssss.reconstruction.retrieve_secret_number(parts_list, field_limit)
+    secret_number = ssss.reconstruction.retrieve_secret_number(parts_list, field_limit)
+    secret_string = ssss.conversions.integer_to_string(secret_number)
 
     print(f"Reconstructing the secret from {len(parts_list)} parts")
     print(f"Field limit has been defined as {field_limit}")
     print()
-    print(f"Secret : '{secret}'")
+    print(f"Secret : '{secret_string}'")

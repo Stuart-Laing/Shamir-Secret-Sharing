@@ -100,7 +100,7 @@ class PartsFile:
 
             try:
                 Number(line_match_obj.group().split(" ")[1], self.base)
-            except ValueError:
+            except shamir_secret_sharing_system.errors.ValueNotOfSpecifiedBaseError:
                 raise shamir_secret_sharing_system.errors.PartsFileBaseError(
                     f"Part value at line no {line_no + 1} is not of the expected base")
 

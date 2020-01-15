@@ -1,0 +1,12 @@
+Splitting the secret 'Demo File number 5' into 3 parts
+Reconstruction of the secret will require a minimum of 2 parts
+Field limit and part y values are in base 16
+
+Field Limit : 1ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+
+Parts:
+ | X | Y                                                                                                                                   |
+ +---+-------------------------------------------------------------------------------------------------------------------------------------+
+ | 1 | f10e4eb556e5ad373deb8fb6753b3a6c0252c786b4b07471d113e6b5481254270a13e7dc5ab9d4f6d7abfe29342ea16ff023e851af19f05ed644232f486c7c036d  |
+ | 2 | 1e21c9d6aadcb5a6e7bd71f6cea7674d804a58f0d6960e8e3a227cd6a9024a84e1427cfb8b573a9edaf57fc52685d419b7ada618317ca74588c19d0f12e7385e6a5 |
+ | 3 | d32aec2004b107a5b9c2af235fb1af4406f856941e115d55733bb41fd836fc751e3bb795102d7ee48703fa7b9c8be1c70590dab4807af85241ef7eb3147a8fc9de  |
