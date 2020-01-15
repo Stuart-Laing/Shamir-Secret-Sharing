@@ -1,3 +1,47 @@
+import shamir_secret_sharing_system
+
+
+def base_converter(number, current_base, target_base):
+    """
+    Converts the given number from its current base to the target base
+
+    :param number: str, int The number to be converted
+    :param current_base: int The current base the given number is in
+    :param target_base: int The target base the number will be converted to
+    :returns output_number: str The number after being converted
+    """
+
+    if not isinstance(number, (str, int)):
+        raise TypeError("number must be of type str or int")
+    if not isinstance(current_base, int):
+        raise TypeError("current_base must be of type int")
+    if not isinstance(target_base, int):
+        raise TypeError("target_base must be of type int")
+
+    try:
+        shamir_secret_sharing_system.verify.Base(current_base)
+    except shamir_secret_sharing_system.errors.BaseNotSupportedError:
+        raise shamir_secret_sharing_system.errors.BaseNotSupportedError("Current base is not supported")
+
+    try:
+        shamir_secret_sharing_system.verify.Base(target_base)
+    except shamir_secret_sharing_system.errors.BaseNotSupportedError:
+        raise shamir_secret_sharing_system.errors.BaseNotSupportedError("Target base is not supported")
+
+    try:
+        shamir_secret_sharing_system.verify.Number(str(number), current_base)
+    except shamir_secret_sharing_system.errors.ValueNotOfSpecifiedBaseError:
+        raise shamir_secret_sharing_system.errors.ValueNotOfSpecifiedBaseError(
+            "Given number is not of the base specified")
+
+    # Currently only supporting converting number to hex
+    number = str(number).lower()
+    number_base10 = int(number, current_base)
+
+    if target_base == 10:
+        return number_base10
+    elif target_base == 16:
+        return hex(number_base10)[2:]
 
 
 def string_to_integer(secret_string):
@@ -9,16 +53,13 @@ def string_to_integer(secret_string):
     :raises ValueError: If the character cannot be represented by two hex digits
     """
 
-    if not isinstance(secret_string, str):
-        raise TypeError("secret_string must be of type str")
+    shamir_secret_sharing_system.verify.Secret(secret_string)
 
     # Each single value character is given a leading 0 so they are all the same length
     # We start the string with '1' every time so if the first value has a leading 0 we do not lose any information
     encoded_secret = "1"
 
     for character in secret_string:
-        if ord(character) > 255:
-            raise ValueError("All characters must be able to be represented by two hex digits")
 
         # hex(18) gives 0x12 so [2:] discards the leading hex flag
         new_val = hex(ord(character))[2:]

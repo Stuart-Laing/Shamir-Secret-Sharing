@@ -11,6 +11,9 @@ import shamir_secret_sharing_system as ssss
 # Possible option to not bother with field limits
 # Learn how sub packages work
 # Print more messages about the created secret or parts list, give more detail to the user
+# type hints son
+# Have verify return more specific errors
+# Make all functions use in built verify functionality
 # kill self
 
 arg_handler = argcurse.Handler("-h", "--help")
@@ -45,7 +48,7 @@ if arg_handler.results.mode_used == "create":
 
     total_parts_to_create = arg_handler.results.result_dict["-n"].flag_content
     min_parts_to_reconstruct = arg_handler.results.result_dict["-k"].flag_content
-    ssss.verify.NAndK(total_parts_to_create, min_parts_to_reconstruct)
+    ssss.verify.NAndK(total_parts_to_create, min_parts_to_reconstruct, command_line_arg=True)
 
     if arg_handler.results.result_dict["-ob"].flag_used:
         base = arg_handler.results.result_dict["-ob"].flag_content
@@ -93,6 +96,8 @@ elif arg_handler.results.mode_used == "reconstruct":
     if arg_handler.results.result_dict["-ib"].flag_used:
         base = arg_handler.results.result_dict["-ib"].flag_content
         ssss.verify.Base(base)
+
+        base = int(base)
     else:
         base = 10
 

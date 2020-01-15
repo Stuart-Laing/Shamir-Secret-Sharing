@@ -1,4 +1,5 @@
 import random
+import shamir_secret_sharing_system
 
 MERSENNE_PRIMES_EXPONENTS = (5, 7, 13, 17, 19, 31, 61, 89, 107, 127, 521, 607, 1279)
 
@@ -45,10 +46,7 @@ def create_part_list(secret_number, total_parts_to_create, minimum_parts_for_rec
     if not isinstance(minimum_parts_for_reconstruction, int):
         raise TypeError("minimum_parts_for_reconstruction must be of type int")
 
-    if total_parts_to_create < minimum_parts_for_reconstruction:
-        raise ValueError("minimum_parts_for_reconstruction must be less than or equal to total_parts_to_create")
-    if minimum_parts_for_reconstruction < 2:
-        raise ValueError("Creating a part list of length one would just be the secret")
+    shamir_secret_sharing_system.verify.NAndK(total_parts_to_create, minimum_parts_for_reconstruction)
 
     field_limit = 0
     for exponent in MERSENNE_PRIMES_EXPONENTS:
