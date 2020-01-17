@@ -41,11 +41,6 @@ def part_table(x_y_list):
 
     return formatted_table
 
-# TODO
-# Learn how sub packages work
-# Add a ton of demo files
-# type hints son
-
 
 arg_handler = argcurse.Handler("-h", "--help")
 arg_handler.add_default("""Usage: Secret-Sharing [mode] [options]
