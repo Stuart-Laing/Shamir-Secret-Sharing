@@ -1,8 +1,8 @@
-from shamir_secret_sharing_system import reconstruction
-from shamir_secret_sharing_system import creation
-from shamir_secret_sharing_system import conversions
-from shamir_secret_sharing_system import errors
-from shamir_secret_sharing_system import verify
+from . import reconstruction
+from . import creation
+from . import conversions
+from . import errors
+from . import verify
 
 
 # TODO PACKAGE
@@ -10,7 +10,6 @@ from shamir_secret_sharing_system import verify
 # type hints son
 # doc strings
 # Write some unittests
-# __all__ bb
 
 # TODO __main__.py
 # Add an option to output the information to a file

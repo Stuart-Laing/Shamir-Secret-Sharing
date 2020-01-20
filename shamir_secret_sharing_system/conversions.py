@@ -19,17 +19,17 @@ def base_converter(number, current_base, target_base):
         raise TypeError("target_base must be of type int")
 
     try:
-        shamir_secret_sharing_system.verify.Base(current_base)
+        testing.verify.Base(current_base)
     except shamir_secret_sharing_system.errors.BaseNotSupportedError:
         raise shamir_secret_sharing_system.errors.BaseNotSupportedError("Current base is not supported")
 
     try:
-        shamir_secret_sharing_system.verify.Base(target_base)
+        testing.verify.Base(target_base)
     except shamir_secret_sharing_system.errors.BaseNotSupportedError:
         raise shamir_secret_sharing_system.errors.BaseNotSupportedError("Target base is not supported")
 
     try:
-        shamir_secret_sharing_system.verify.Number(str(number), current_base)
+        testing.verify.Number(str(number), current_base)
     except shamir_secret_sharing_system.errors.ValueNotOfSpecifiedBaseError:
         raise shamir_secret_sharing_system.errors.ValueNotOfSpecifiedBaseError(
             "Given number is not of the base specified")
@@ -53,7 +53,7 @@ def string_to_integer(secret_string):
     :raises ValueError: If the character cannot be represented by two hex digits
     """
 
-    shamir_secret_sharing_system.verify.Secret(secret_string)
+    testing.verify.Secret(secret_string)
 
     # Each single value character is given a leading 0 so they are all the same length
     # We start the string with '1' every time so if the first value has a leading 0 we do not lose any information
