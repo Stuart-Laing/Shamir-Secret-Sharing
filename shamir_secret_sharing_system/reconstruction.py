@@ -100,8 +100,8 @@ def read_parts_from_file(file_path, base):
     :param base: int The number base the parts file is in
     :returns parts_list: list A list of tuples containing the x and y values for the parts
     """
-    testing.verify.Base(base)
-    testing.verify.PartsFile(file_path, base)
+    shamir_secret_sharing_system.verify.Base(base)
+    shamir_secret_sharing_system.verify.PartsFile(file_path, base)
 
     with open(file_path, "r") as parts_file:
         parts_list = [(int(x.strip().split(" ")[0]),

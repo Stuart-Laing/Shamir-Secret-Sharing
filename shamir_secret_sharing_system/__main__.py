@@ -1,7 +1,6 @@
 import argcurse
 import shamir_secret_sharing_system as ssss
 
-
 VERTICAL = "|"
 HORIZONTAL = "-"
 CROSS = "+"
@@ -72,11 +71,11 @@ if arg_handler.results.mode_used == "create":
     print()
     secret_string = arg_handler.results.result_dict["-s"].flag_content
     try:
-        testing.verify.Secret(secret_string)
+        ssss.verify.Secret(secret_string)
     except ssss.errors.SecretStringLengthError:
         print("### ERROR ###")
-        print(f"Secret string length cannot be less than {testing.verify.SECRET_STRING_MIN_LEN}"
-              f" or greater than {testing.verify.SECRET_STRING_MAX_LEN}")
+        print(f"Secret string length cannot be less than {ssss.constants.SECRET_STRING_MIN_LEN}"
+              f" or greater than {ssss.constants.SECRET_STRING_MAX_LEN}")
         exit()
     except ssss.errors.SecretStringEncodingError:
         print("### ERROR ###")
@@ -86,7 +85,7 @@ if arg_handler.results.mode_used == "create":
     total_parts_to_create = arg_handler.results.result_dict["-n"].flag_content
     min_parts_to_reconstruct = arg_handler.results.result_dict["-k"].flag_content
     try:
-        testing.verify.NAndK(total_parts_to_create, min_parts_to_reconstruct, command_line_arg=True)
+        ssss.verify.NAndK(total_parts_to_create, min_parts_to_reconstruct, command_line_arg=True)
     except TypeError:
         print("### ERROR ###")
         print("-n and -k must both be integers of base 10")
@@ -103,7 +102,7 @@ if arg_handler.results.mode_used == "create":
     if arg_handler.results.result_dict["-ob"].flag_used:
         base = arg_handler.results.result_dict["-ob"].flag_content
         try:
-            testing.verify.Base(base, command_line_arg=True)
+            ssss.verify.Base(base, command_line_arg=True)
 
             base = int(base)
         except TypeError:
@@ -112,7 +111,8 @@ if arg_handler.results.mode_used == "create":
             exit()
         except ssss.errors.BaseNotSupportedError:
             print("### ERROR ###")
-            print(f"The base specified is currently not supported please choose one of {testing.verify.SUPPORTED_BASES}")
+            print(f"The base specified is currently not supported please choose one of "
+                  f"{ssss.constants.SUPPORTED_BASES}")
             exit()
     else:
         base = 10
@@ -142,14 +142,15 @@ elif arg_handler.results.mode_used == "reconstruct":
     if arg_handler.results.result_dict["-ib"].flag_used:
         base = arg_handler.results.result_dict["-ib"].flag_content
         try:
-            testing.verify.Base(base, command_line_arg=True)
+            ssss.verify.Base(base, command_line_arg=True)
         except TypeError:
             print("### ERROR ###")
             print("Specified base must be an integer of base 10")
             exit()
         except ssss.errors.BaseNotSupportedError:
             print("### ERROR ###")
-            print(f"The base specified is currently not supported please choose one of {testing.verify.SUPPORTED_BASES}")
+            print(f"The base specified is currently not supported please choose one of "
+                  f"{ssss.constants.SUPPORTED_BASES}")
             exit()
 
         base = int(base)
@@ -159,7 +160,7 @@ elif arg_handler.results.mode_used == "reconstruct":
     parts_file_path = arg_handler.results.result_dict["-p"].flag_content
 
     try:
-        testing.verify.PartsFile(parts_file_path, base)
+        ssss.verify.PartsFile(parts_file_path, base)
     except FileExistsError:
         print("### ERROR ###")
         print("Chosen parts file does not exist")
@@ -183,7 +184,7 @@ elif arg_handler.results.mode_used == "reconstruct":
 
     field_limit = arg_handler.results.result_dict["-f"].flag_content
     try:
-        testing.verify.FieldLimit(field_limit, base)
+        ssss.verify.FieldLimit(field_limit, base)
 
     except ValueError:
         print("### ERROR ###")

@@ -1,10 +1,6 @@
 import shamir_secret_sharing_system
 
 
-_SECRET_STRING_MIN_LEN = 1
-_SECRET_STRING_MAX_LEN = 200
-
-
 class Secret:
     def __init__(self, secret_string):
 
@@ -15,8 +11,8 @@ class Secret:
         # Each character can be represented by two hex digits
 
         self.secret_string = secret_string
-        self.min_length = _SECRET_STRING_MIN_LEN
-        self.max_length = _SECRET_STRING_MAX_LEN
+        self.min_length = shamir_secret_sharing_system.constants.SECRET_STRING_MIN_LEN
+        self.max_length = shamir_secret_sharing_system.constants.SECRET_STRING_MAX_LEN
 
         self.check_type()
         self.check_length()

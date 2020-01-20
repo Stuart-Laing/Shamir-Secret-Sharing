@@ -1,9 +1,6 @@
 import shamir_secret_sharing_system
 
 
-_SUPPORTED_BASES = (10, 16)
-
-
 class Base:
     def __init__(self, base, command_line_arg=False):
         """
@@ -18,7 +15,7 @@ class Base:
         # The base is one of the supported bases
 
         self.base = base
-        self.allowed_bases = _SUPPORTED_BASES
+        self.allowed_bases = shamir_secret_sharing_system.constants.SUPPORTED_BASES
 
         self.check_is_num(command_line_arg)
         self.check_if_allowed()
