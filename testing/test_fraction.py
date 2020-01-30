@@ -1,20 +1,17 @@
-from shamir_secret_sharing_system.fraction import Fraction
+from shamir_secret_sharing_system._fraction import Fraction
 import unittest
 
 
-# TODO
-# Test if repr works
-# Test if eq works | Fraction == Fraction | Fraction == other
-# Test if multiply works | Fraction * Fraction | Fraction * int | Fraction * other
-# Test if divide works | Fraction / Fraction - Fraction / int | Fraction / other
-# Test if add works | Fraction + Fraction | Fraction + int | Fraction + other
-# Test if sub works | Fraction - Fraction | Fraction - int | Fraction - other
-# Test if int works | Not 1 denominator | Yes 1 denominator
-# Test if reduce works
-# ADD MESSAGES
-
-
 class TestFraction(unittest.TestCase):
+    # Test if repr works
+    # Test if eq works | Fraction == Fraction | Fraction == other
+    # Test if multiply works | Fraction * Fraction | Fraction * int | Fraction * other
+    # Test if divide works | Fraction / Fraction - Fraction / int | Fraction / other
+    # Test if add works | Fraction + Fraction | Fraction + int | Fraction + other
+    # Test if sub works | Fraction - Fraction | Fraction - int | Fraction - other
+    # Test if int works | Not 1 denominator | Yes 1 denominator
+    # Test if reduce works
+
     def test_repr(self):
         self.assertEqual(repr(Fraction(1, 2)), "1/2")
         self.assertEqual(repr(Fraction(5, 2)), "5/2")
@@ -31,7 +28,9 @@ class TestFraction(unittest.TestCase):
 
         with self.assertRaises(TypeError):
             _ = Fraction(12, 5) == 20
+        with self.assertRaises(TypeError):
             _ = Fraction(97, 102) == "Nope"
+        with self.assertRaises(TypeError):
             _ = Fraction(2, 21445) == [1, 6, 2]
 
     def test_multiply(self):
@@ -45,7 +44,9 @@ class TestFraction(unittest.TestCase):
 
         with self.assertRaises(TypeError):
             _ = Fraction(50, 51) * "Wow thats amazing"
+        with self.assertRaises(TypeError):
             _ = Fraction(1, 2) * 10.123
+        with self.assertRaises(TypeError):
             _ = Fraction(9, 1) * [1, 5]
 
     def test_truediv(self):
@@ -59,7 +60,9 @@ class TestFraction(unittest.TestCase):
 
         with self.assertRaises(TypeError):
             _ = Fraction(50, 51) / "Wow thats amazing"
+        with self.assertRaises(TypeError):
             _ = Fraction(1, 2) / 10.123
+        with self.assertRaises(TypeError):
             _ = Fraction(9, 1) / [1, 5]
 
     def test_add(self):
@@ -73,7 +76,9 @@ class TestFraction(unittest.TestCase):
 
         with self.assertRaises(TypeError):
             _ = Fraction(50, 51) + "Wow thats amazing"
+        with self.assertRaises(TypeError):
             _ = Fraction(1, 2) + 10.123
+        with self.assertRaises(TypeError):
             _ = Fraction(9, 1) + [1, 5]
 
     def test_sub(self):
@@ -87,7 +92,9 @@ class TestFraction(unittest.TestCase):
 
         with self.assertRaises(TypeError):
             _ = Fraction(50, 51) - "Wow thats amazing"
+        with self.assertRaises(TypeError):
             _ = Fraction(1, 2) - 10.123
+        with self.assertRaises(TypeError):
             _ = Fraction(9, 1) - [1, 5]
 
     def test_int(self):
@@ -97,7 +104,9 @@ class TestFraction(unittest.TestCase):
 
         with self.assertRaises(ValueError):
             _ = int(Fraction(-5, 51))
+        with self.assertRaises(ValueError):
             _ = int(Fraction(123, 50))
+        with self.assertRaises(ValueError):
             _ = int(Fraction(5, 10))
 
     def test_reduce(self):

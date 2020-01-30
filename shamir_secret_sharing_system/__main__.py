@@ -41,35 +41,35 @@ def part_table(x_y_list):
     return formatted_table
 
 
-arg_handler = argcurse.Handler("-h", "--help")
-arg_handler.add_default("""Usage: Secret-Sharing [mode] [options]
-Try -h or --help for more info.""")
+arg_handler = argcurse.Handler("-h", "--help", using_modes=True)
 
-arg_handler.add_mode(options=("create", "reconstruct"), descriptions=("Create a new list of parts from a secret",
-                                                                      "Create a secret from a list of parts"))
+arg_handler.add_mode("create", "Create a new list of parts from a secret")
+arg_handler.add_mode("reconstruct", "Create a secret from a list of parts")
 
-arg_handler.add_flag("-s", "--secret", description="The secret that will be split", required=True,
-                     has_content=True, content_help="<Secret>", modes="create")
-arg_handler.add_flag("-n", "--total-parts", description="The total number of parts to create", required=True,
-                     has_content=True, content_help="<Parts>", modes="create")
-arg_handler.add_flag("-k", "--min-reconstruct", description="Minimum parts to reconstruct the secret", required=True,
-                     has_content=True, content_help="<Parts>", modes="create")
+arg_handler.add_flag("-s", "--secret", description="The secret that will be split", flag_required=True,
+                     has_content=True, content_help="<Secret>", mode="create")
+arg_handler.add_flag("-n", "--total-parts", description="The total number of parts to create", flag_required=True,
+                     has_content=True, content_help="<Parts>", mode="create")
+arg_handler.add_flag("-k", "--min-reconstruct", description="Minimum parts to reconstruct the secret",
+                     flag_required=True, has_content=True, content_help="<Parts>", mode="create")
 arg_handler.add_flag("-ob", "--output-base", description="The number base to outputs the results",
-                     has_content=True, content_help="<Base>", modes="create", default="10")
+                     has_content=True, content_help="<Base>", mode="create", default="10")
 
-arg_handler.add_flag("-f", "--field-limit", description="The field limit of the secret", required=True,
-                     has_content=True, content_help="<Limit>", modes="reconstruct")
-arg_handler.add_flag("-p", "--parts-file", description="The file holding the required parts", required=True,
-                     has_content=True, content_help="<File Path>", modes="reconstruct")
+arg_handler.add_flag("-f", "--field-limit", description="The field limit of the secret", flag_required=True,
+                     has_content=True, content_help="<Limit>", mode="reconstruct")
+arg_handler.add_flag("-p", "--parts-file", description="The file holding the required parts", flag_required=True,
+                     has_content=True, content_help="<File Path>", mode="reconstruct")
 arg_handler.add_flag("-ib", "--input-base", description="The number base of the input values",
-                     has_content=True, content_help="<Base>", modes="reconstruct", default="10")
+                     has_content=True, content_help="<Base>", mode="reconstruct", default="10")
 
-arg_handler.generate_help_message("Secret-Sharing [mode] [options]")
+arg_handler.generate_default_message("secret-sharing")
+arg_handler.generate_help_message("secret-sharing")
+
 arg_handler.compile()
 
 if arg_handler.results.mode_used == "create":
     print()
-    secret_string = arg_handler.results.result_dict["-s"].flag_content
+    secret_string = arg_handler.results["-s"].flag_content
     try:
         ssss.verify.Secret(secret_string)
     except ssss.errors.SecretStringLengthError:
@@ -82,8 +82,8 @@ if arg_handler.results.mode_used == "create":
         print("Secret string must only contain ascii characters")
         exit()
 
-    total_parts_to_create = arg_handler.results.result_dict["-n"].flag_content
-    min_parts_to_reconstruct = arg_handler.results.result_dict["-k"].flag_content
+    total_parts_to_create = arg_handler.results["-n"].flag_content
+    min_parts_to_reconstruct = arg_handler.results["-k"].flag_content
     try:
         ssss.verify.NAndK(total_parts_to_create, min_parts_to_reconstruct, command_line_arg=True)
     except TypeError:
@@ -99,8 +99,8 @@ if arg_handler.results.mode_used == "create":
         print("Creating fewer parts than required to reconstruct the secret would make it irrecoverable")
         exit()
 
-    if arg_handler.results.result_dict["-ob"].flag_used:
-        base = arg_handler.results.result_dict["-ob"].flag_content
+    if arg_handler.results["-ob"].flag_used:
+        base = arg_handler.results["-ob"].flag_content
         try:
             ssss.verify.Base(base, command_line_arg=True)
 
@@ -139,8 +139,8 @@ if arg_handler.results.mode_used == "create":
 elif arg_handler.results.mode_used == "reconstruct":
     print()
 
-    if arg_handler.results.result_dict["-ib"].flag_used:
-        base = arg_handler.results.result_dict["-ib"].flag_content
+    if arg_handler.results["-ib"].flag_used:
+        base = arg_handler.results["-ib"].flag_content
         try:
             ssss.verify.Base(base, command_line_arg=True)
         except TypeError:
@@ -157,7 +157,7 @@ elif arg_handler.results.mode_used == "reconstruct":
     else:
         base = 10
 
-    parts_file_path = arg_handler.results.result_dict["-p"].flag_content
+    parts_file_path = arg_handler.results["-p"].flag_content
 
     try:
         ssss.verify.PartsFile(parts_file_path, base)
@@ -182,7 +182,7 @@ elif arg_handler.results.mode_used == "reconstruct":
         print("Part values must be in the specified base")
         exit()
 
-    field_limit = arg_handler.results.result_dict["-f"].flag_content
+    field_limit = arg_handler.results["-f"].flag_content
     try:
         ssss.verify.FieldLimit(field_limit, base)
 

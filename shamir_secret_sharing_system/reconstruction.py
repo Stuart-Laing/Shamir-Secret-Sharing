@@ -1,5 +1,5 @@
 import shamir_secret_sharing_system
-from shamir_secret_sharing_system.fraction import Fraction
+from shamir_secret_sharing_system._fraction import Fraction
 
 
 __all__ = ["read_parts_from_file", "retrieve_secret_number"]

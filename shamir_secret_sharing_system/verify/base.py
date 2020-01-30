@@ -7,7 +7,7 @@ class Base:
         Creates the object and calls each check function to verify it
 
         :param base: int, str The base that the user wishes to use
-        :param command_line_arg: Specifies whether the base is being given directly from sys.args or from a function
+        :param command_line_arg: bool Specifies whether the base is being given directly from sys.args or from a function
         """
 
         # Things to check
@@ -20,9 +20,9 @@ class Base:
         self.check_is_num(command_line_arg)
         self.check_if_allowed()
 
-    def check_is_num(self, allowed_to_be_string):
-        if allowed_to_be_string:
-            if not isinstance(self.base, (str, int)):
+    def check_is_num(self, num_is_string):
+        if num_is_string:
+            if not isinstance(self.base, str):
                 raise TypeError("base must be of type int or convertible to one")
             try:
                 self.base = int(self.base)
