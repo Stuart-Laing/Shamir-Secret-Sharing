@@ -12,5 +12,10 @@ from . import constants
 # doc strings
 # Write some unittests
 
+
 # TODO __main__.py
 # Add an option to output the information to a file
+
+
+# Useful links
+# https://medium.com/@apogiatzis/shamirs-secret-sharing-a-numeric-example-walkthrough-a59b288c34c4
