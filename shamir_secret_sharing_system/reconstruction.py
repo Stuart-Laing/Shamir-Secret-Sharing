@@ -1,11 +1,13 @@
 import shamir_secret_sharing_system
 from shamir_secret_sharing_system._fraction import Fraction
 
+from typing import List, Tuple
+
 
 __all__ = ["read_parts_from_file", "retrieve_secret_number"]
 
 
-def read_parts_from_file(file_path, base):
+def read_parts_from_file(file_path: str, base: int) -> List[Tuple[int, (int, str)]]:
     """
     Read the parts from a text file
 
@@ -24,7 +26,7 @@ def read_parts_from_file(file_path, base):
     return parts_list
 
 
-def retrieve_secret_number(parts_list, field_limit):
+def retrieve_secret_number(parts_list: List[Tuple[int, (int, str)]], field_limit: int) -> int:
     """
     Reconstruct the secret number from a parts list and field limit
 
@@ -57,9 +59,12 @@ def retrieve_secret_number(parts_list, field_limit):
     return secret_number
 
 
-def _extended_gcd(a, b):
+def _extended_gcd(a: int, b: int):
     """
     Shamelessly stolen from https://brilliant.org/wiki/extended-euclidean-algorithm/
+
+    :param a: int
+    :param b: int
     """
     x = 0
     y = 1
@@ -83,7 +88,11 @@ def _extended_gcd(a, b):
     return x, y, gcd
 
 
-def _mod_inverse(k, prime):
+def _mod_inverse(k: int, prime: int) -> int:
+    """
+    :param k: int
+    :param prime: int
+    """
     y = _extended_gcd(prime, k)[1]
 
     return y % prime

@@ -1,7 +1,7 @@
 import shamir_secret_sharing_system
 
 
-def base_converter(number, current_base, target_base):
+def base_converter(number: (str, int), current_base: int, target_base: int) -> (int, str):
     """
     Converts the given number from its current base to the target base
 
@@ -44,7 +44,7 @@ def base_converter(number, current_base, target_base):
         return hex(number_base10)[2:]
 
 
-def string_to_integer(secret_string):
+def string_to_integer(secret_string: str) -> int:
     """
     Converts the string to a sequence of hex values that is interpreted as an integer
 
@@ -70,7 +70,7 @@ def string_to_integer(secret_string):
     return int(encoded_secret, 16)
 
 
-def integer_to_string(secret_number):
+def integer_to_string(secret_number: int) -> str:
     """
     Converts the secret number to its string representation
 

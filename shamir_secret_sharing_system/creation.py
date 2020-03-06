@@ -1,23 +1,30 @@
 import shamir_secret_sharing_system
 import random
 
+from typing import Tuple
+
 
 class _Polynomial:
-    def __init__(self, *values):
+    """
+    Class to store the polynomial
+    """
+    def __init__(self, *values: int):
+        """
+        :param *values: int The values to build the polynomial
+        """
         # TODO Find a better name than 'values'
-        self.values = values
+        self.values: Tuple[int] = values
 
     def __repr__(self):
-        # output_string = f"{self.values[0]} + "
-
         output_string = " + ".join([f"{num}x^{index}" for index, num in enumerate(self.values)])
 
         return output_string
 
-    def find_x(self, y):
-        pass
-
-    def find_y(self, x, field_limit):
+    def find_y(self, x: int, field_limit: int):
+        """
+        :param x: int The x value from which to find the y
+        :param field_limit: int The field limit for the finite field arithmetic
+        """
         y = 0
         for index, value in enumerate(self.values):
             exponentiation = (x ** index) % field_limit
@@ -26,7 +33,7 @@ class _Polynomial:
         return y
 
 
-def create_part_list(secret_number, total_parts_to_create, minimum_parts_for_reconstruction):
+def create_part_list(secret_number: int, total_parts_to_create: int, minimum_parts_for_reconstruction: int):
     """
     Creates a list of parts from the secret
 
