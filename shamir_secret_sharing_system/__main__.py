@@ -57,10 +57,13 @@ arg_handler.add_flag("-ob", "--output-base", description="The number base to out
 
 arg_handler.add_flag("-f", "--field-limit", description="The field limit of the secret", flag_required=True,
                      has_content=True, content_help="<Limit>", mode="reconstruct")
-arg_handler.add_flag("-p", "--parts-file", description="The file holding the required parts", flag_required=True,
-                     has_content=True, content_help="<File Path>", mode="reconstruct")
 arg_handler.add_flag("-ib", "--input-base", description="The number base of the input values",
                      has_content=True, content_help="<Base>", mode="reconstruct", default="10")
+arg_handler.add_file(file_required=True, mode="reconstruct")
+
+# arg_handler.add_flag("-p", "--parts-file", description="The file holding the required parts", flag_required=True,
+#                      has_content=True, content_help="<File Path>", mode="reconstruct")
+
 
 arg_handler.generate_default_message("secret-sharing")
 arg_handler.generate_help_message("secret-sharing")
@@ -157,7 +160,7 @@ elif arg_handler.results.mode_used == "reconstruct":
     else:
         base = 10
 
-    parts_file_path = arg_handler.results["-p"].flag_content
+    parts_file_path = arg_handler.results["file"].file_list[0]
 
     try:
         ssss.verify.PartsFile(parts_file_path, base)
