@@ -1,10 +1,11 @@
+from typing import Union
 
 
 class Fraction:
     """
     Class to store a fraction.
     """
-    def __init__(self, numerator: int, denominator: int, reduce: int = False):
+    def __init__(self, numerator: int, denominator: int, reduce: bool = False):
         """
         :param numerator: int The numerator of the fraction
         :param denominator: int The denominator of the fraction
@@ -45,7 +46,7 @@ class Fraction:
         else:
             raise TypeError(f"Cannot check equality between Fraction and {type(other)}")
 
-    def __mul__(self, other: ("Fraction", int)) -> "Fraction":
+    def __mul__(self, other: Union["Fraction", int]) -> "Fraction":
         """
         :param other: Fraction, int The fraction or integer that is being multiplied
         """
@@ -58,7 +59,7 @@ class Fraction:
         else:
             raise TypeError(f"Fraction Cannot be multiplied by {type(other)}")
 
-    def __truediv__(self, other: "Fraction") -> "Fraction":
+    def __truediv__(self, other: Union["Fraction", int]) -> "Fraction":
         """
         :param other: Fraction The fraction that is being divided
         """
@@ -71,7 +72,7 @@ class Fraction:
         else:
             raise TypeError(f"Fraction Cannot be divided by {type(other)}")
 
-    def __add__(self, other: "Fraction") -> "Fraction":
+    def __add__(self, other: Union["Fraction", int]) -> "Fraction":
         """
         :param other: Fraction The fraction that is being added
         """
@@ -92,7 +93,7 @@ class Fraction:
         else:
             raise TypeError(f"Fraction Cannot be added to by {type(other)}")
 
-    def __sub__(self, other: "Fraction") -> "Fraction":
+    def __sub__(self, other: Union["Fraction", int]) -> "Fraction":
         """
         :param other: Fraction The fraction that is being subtracted
         """

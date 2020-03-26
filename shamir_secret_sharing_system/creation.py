@@ -1,7 +1,7 @@
 import shamir_secret_sharing_system
 import random
 
-from typing import Tuple
+from typing import Tuple, List
 
 
 class _Polynomial:
@@ -20,7 +20,7 @@ class _Polynomial:
 
         return output_string
 
-    def find_y(self, x: int, field_limit: int):
+    def find_y(self, x: int, field_limit: int) -> int:
         """
         :param x: int The x value from which to find the y
         :param field_limit: int The field limit for the finite field arithmetic
@@ -33,7 +33,8 @@ class _Polynomial:
         return y
 
 
-def create_part_list(secret_number: int, total_parts_to_create: int, minimum_parts_for_reconstruction: int):
+def create_part_list(secret_number: int, total_parts_to_create: int, minimum_parts_for_reconstruction: int)\
+        -> Tuple[List[Tuple[int, int]], int]:
     """
     Creates a list of parts from the secret
 

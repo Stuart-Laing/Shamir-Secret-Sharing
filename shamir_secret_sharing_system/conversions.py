@@ -1,7 +1,9 @@
 import shamir_secret_sharing_system
 
+from typing import Union
 
-def base_converter(number: (str, int), current_base: int, target_base: int) -> (int, str):
+
+def base_converter(number: Union[str, int], current_base: int, target_base: int) -> Union[str, int]:
     """
     Converts the given number from its current base to the target base
 
