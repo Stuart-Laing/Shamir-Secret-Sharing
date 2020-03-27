@@ -1,6 +1,7 @@
-import shamir_secret_sharing_system
-import random
+from .verify import NAndK
+from .constants import MERSENNE_PRIMES_EXPONENTS
 
+import random
 from typing import Tuple, List
 
 
@@ -52,10 +53,10 @@ def create_part_list(secret_number: int, total_parts_to_create: int, minimum_par
     if not isinstance(minimum_parts_for_reconstruction, int):
         raise TypeError("minimum_parts_for_reconstruction must be of type int")
 
-    shamir_secret_sharing_system.verify.NAndK(total_parts_to_create, minimum_parts_for_reconstruction)
+    NAndK(total_parts_to_create, minimum_parts_for_reconstruction)
 
     field_limit = 0
-    for exponent in shamir_secret_sharing_system.constants.MERSENNE_PRIMES_EXPONENTS:
+    for exponent in MERSENNE_PRIMES_EXPONENTS:
         if (2 ** exponent) - 1 > max(secret_number, total_parts_to_create):
             field_limit = (2 ** exponent) - 1
             break

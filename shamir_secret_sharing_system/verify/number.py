@@ -1,4 +1,7 @@
-import shamir_secret_sharing_system
+from ..errors import ValueNotOfSpecifiedBaseError
+
+
+__all__ = ["Number"]
 
 
 class Number:
@@ -29,5 +32,4 @@ class Number:
 
         for digit in self.number:
             if digit not in self.allowed_chars:
-                raise shamir_secret_sharing_system.errors.ValueNotOfSpecifiedBaseError(
-                    "Given number cannot be converted to the given base")
+                raise ValueNotOfSpecifiedBaseError("Given number cannot be converted to the given base")

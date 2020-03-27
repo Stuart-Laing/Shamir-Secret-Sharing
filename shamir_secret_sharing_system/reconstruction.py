@@ -1,5 +1,6 @@
-import shamir_secret_sharing_system
-from shamir_secret_sharing_system._fraction import Fraction
+from .verify import Base, PartsFile
+from .conversions import base_converter
+from ._fraction import Fraction
 
 from typing import List, Tuple, Union
 
@@ -15,12 +16,11 @@ def read_parts_from_file(file_path: str, base: int) -> List[Tuple[int, Union[int
     :param base: int The number base the parts file is in
     :returns parts_list: list A list of tuples containing the x and y values for the parts
     """
-    shamir_secret_sharing_system.verify.Base(base)
-    shamir_secret_sharing_system.verify.PartsFile(file_path, base)
+    Base(base)
+    PartsFile(file_path, base)
 
     with open(file_path, "r") as parts_file:
-        parts_list = [(int(x.strip().split(" ")[0]),
-                       shamir_secret_sharing_system.conversions.base_converter(x.strip().split(" ")[1], base, 10))
+        parts_list = [(int(x.strip().split(" ")[0]), base_converter(x.strip().split(" ")[1], base, 10))
                       for x in parts_file.readlines()]
 
     return parts_list

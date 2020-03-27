@@ -1,6 +1,11 @@
-import shamir_secret_sharing_system
+from ..errors import PartsFileCountError, PartsFileFormatError, PartsFileBaseError, ValueNotOfSpecifiedBaseError
+from . import Number
+
 import re
 import os
+
+
+__all__ = ["PartsFile"]
 
 
 class PartsFile:
@@ -49,7 +54,7 @@ class PartsFile:
             lines = [line.strip() for line in parts_file.readlines()]
 
         if len(lines) < 2:
-            raise shamir_secret_sharing_system.errors.PartsFileCountError(
+            raise PartsFileCountError(
                 "Chosen file does not contain enough entries")
 
         valid_base = re.compile(r"^\d+\040[A-Za-z0-9+/]+$")
@@ -58,11 +63,11 @@ class PartsFile:
             line_match_obj = valid_base.search(line)
 
             if line_match_obj is None:
-                raise shamir_secret_sharing_system.errors.PartsFileFormatError(
+                raise PartsFileFormatError(
                     "Parts File must be in the format '<PartNum> <PartValue>' 1 per line")
 
             try:
-                shamir_secret_sharing_system.verify.Number(line_match_obj.group().split(" ")[1], self.base)
-            except shamir_secret_sharing_system.errors.ValueNotOfSpecifiedBaseError:
-                raise shamir_secret_sharing_system.errors.PartsFileBaseError(
+                Number(line_match_obj.group().split(" ")[1], self.base)
+            except ValueNotOfSpecifiedBaseError:
+                raise PartsFileBaseError(
                     f"Part value at line no {line_no + 1} is not of the expected base")

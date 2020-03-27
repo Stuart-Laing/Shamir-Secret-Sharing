@@ -1,4 +1,6 @@
-import shamir_secret_sharing_system
+from .errors import BaseNotSupportedError, ValueNotOfSpecifiedBaseError
+from .verify import Base, Number, Secret
+
 
 from typing import Union
 
@@ -21,20 +23,19 @@ def base_converter(number: Union[str, int], current_base: int, target_base: int)
         raise TypeError("target_base must be of type int")
 
     try:
-        shamir_secret_sharing_system.verify.Base(current_base)
-    except shamir_secret_sharing_system.errors.BaseNotSupportedError:
-        raise shamir_secret_sharing_system.errors.BaseNotSupportedError("Current base is not supported")
+        Base(current_base)
+    except BaseNotSupportedError:
+        raise BaseNotSupportedError("Current base is not supported")
 
     try:
-        shamir_secret_sharing_system.verify.Base(target_base)
-    except shamir_secret_sharing_system.errors.BaseNotSupportedError:
-        raise shamir_secret_sharing_system.errors.BaseNotSupportedError("Target base is not supported")
+        Base(target_base)
+    except BaseNotSupportedError:
+        raise BaseNotSupportedError("Target base is not supported")
 
     try:
-        shamir_secret_sharing_system.verify.Number(str(number), current_base)
-    except shamir_secret_sharing_system.errors.ValueNotOfSpecifiedBaseError:
-        raise shamir_secret_sharing_system.errors.ValueNotOfSpecifiedBaseError(
-            "Given number is not of the base specified")
+        Number(str(number), current_base)
+    except ValueNotOfSpecifiedBaseError:
+        raise ValueNotOfSpecifiedBaseError("Given number is not of the base specified")
 
     # Currently only supporting converting number to hex
     number = str(number).lower()
@@ -55,7 +56,7 @@ def string_to_integer(secret_string: str) -> int:
     :raises ValueError: If the character cannot be represented by two hex digits
     """
 
-    shamir_secret_sharing_system.verify.Secret(secret_string)
+    Secret(secret_string)
 
     # Each single value character is given a leading 0 so they are all the same length
     # We start the string with '1' every time so if the first value has a leading 0 we do not lose any information

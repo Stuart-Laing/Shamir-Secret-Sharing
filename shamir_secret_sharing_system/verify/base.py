@@ -1,4 +1,8 @@
-import shamir_secret_sharing_system
+from ..constants import SUPPORTED_BASES
+from ..errors import BaseNotSupportedError
+
+
+__all__ = ["Base"]
 
 
 class Base:
@@ -15,7 +19,7 @@ class Base:
         # The base is one of the supported bases
 
         self.base = base
-        self.allowed_bases = shamir_secret_sharing_system.constants.SUPPORTED_BASES
+        self.allowed_bases = SUPPORTED_BASES
 
         self.check_is_num(command_line_arg)
         self.check_if_allowed()
@@ -35,5 +39,4 @@ class Base:
 
     def check_if_allowed(self):
         if self.base not in self.allowed_bases:
-            raise shamir_secret_sharing_system.errors.BaseNotSupportedError(
-                f"Given base is not in the list of supported bases : {self.allowed_bases}")
+            raise BaseNotSupportedError(f"Given base is not in the list of supported bases : {self.allowed_bases}")

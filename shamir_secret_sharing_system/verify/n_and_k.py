@@ -1,4 +1,7 @@
-import shamir_secret_sharing_system
+from ..errors import UnrecoverableSecretError
+
+
+__all__ = ["NAndK"]
 
 
 class NAndK:
@@ -37,7 +40,7 @@ class NAndK:
 
     def check_n_relation_to_k(self):
         if self.total_parts < self.min_for_reconstruct:
-            raise shamir_secret_sharing_system.errors.UnrecoverableSecretError(
+            raise UnrecoverableSecretError(
                 "Secret would be unrecoverable if less parts are created than needed to retrieve secret")
 
     def check_valid_polynomial(self):

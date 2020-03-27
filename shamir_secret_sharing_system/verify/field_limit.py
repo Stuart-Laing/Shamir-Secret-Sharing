@@ -1,4 +1,7 @@
-import shamir_secret_sharing_system
+from . import Number
+
+
+__all__ = ["FieldLimit"]
 
 
 class FieldLimit:
@@ -10,7 +13,7 @@ class FieldLimit:
         # The value if its in a different base is valid for the given base
 
         try:
-            shamir_secret_sharing_system.verify.Number(field_limit, base)
+            Number(field_limit, base)
 
         except ValueError:
             raise ValueError("Field_limit cannot be converted from given base")
