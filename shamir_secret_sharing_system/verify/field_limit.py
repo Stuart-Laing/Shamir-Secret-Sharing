@@ -1,4 +1,5 @@
 from . import Number
+from ..errors import ValueNotOfSpecifiedBaseError
 
 
 __all__ = ["FieldLimit"]
@@ -15,5 +16,5 @@ class FieldLimit:
         try:
             Number(field_limit, base)
 
-        except ValueError:
+        except ValueNotOfSpecifiedBaseError:
             raise ValueError("Field_limit cannot be converted from given base")

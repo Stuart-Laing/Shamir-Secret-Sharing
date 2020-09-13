@@ -2,6 +2,11 @@ from shamir_secret_sharing_system._fraction import Fraction
 import unittest
 
 
+# TODO
+# Each thing that needs to be tested (example: fraction being added to) shall have 3 tests for when it should work
+#     And 3 tests for when it shouldn't
+
+
 class TestFraction(unittest.TestCase):
     # Test if repr works
     # Test if eq works | Fraction == Fraction | Fraction == other
